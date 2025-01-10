@@ -1,0 +1,124 @@
+//     var stripe = Stripe('pk_test_51OLrSyFz9lIBjWEqLpO6s3lMye9SZ6yPmFRJBKpr7QcrjVEpglE5IILHC8k3ZdmfujnVAJwnhfvAoYH8s4Kiqd7R00Fk3nabZT'); // Your Stripe public key);
+//     var elements = stripe.elements();
+//     console.log(elements)
+
+//     var style = {
+//     base: {
+//         color: '#32325d',
+//         fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+//         fontSmoothing: 'antialiased',
+//         fontSize: '16px',
+//         '::placeholder': {
+//             color: '#aab7c4'
+//         }
+//     },
+//     invalid: {
+//         color: '#fa755a',
+//         iconColor: '#fa755a'
+//     }
+// };
+
+// // Card Number
+// var cardNumber = elements.create('cardNumber', {style: style});
+// console.log(cardNumber)
+// cardNumber.mount('#card-number');
+
+
+
+
+
+
+// // Expiration Date
+// var cardExpiry = elements.create('cardExpiry', {style: style});
+// cardExpiry.mount('#card-expiry');
+
+// // CVC
+// var cardCvc = elements.create('cardCvc', {style: style});
+// cardCvc.mount('#card-cvc');
+
+// var form = document.getElementById('payment');
+
+// form.addEventListener('submit', function(event) {
+//     event.preventDefault();
+//     let nameOnCard=document.getElementById('card-name').value;
+//     // console.log(nameOnCard);
+//     let amount=document.getElementById('totalAmount');
+//     // console.log(amount.innerText);
+//     amount=amount.innerText;
+//     let amo=amount.slice(1);
+
+//     fetch('/paymentRequest', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRF-TOKEN': '{{ csrf_token() }}',
+//         },
+//         body: JSON.stringify({
+//             amount:amo  // Replace with dynamic amount (in cents)
+//         }),
+//     }).then(function(response) {
+//         return response.json();
+//     }).then(function(data) {
+//         // Get the client secret from the response and confirm the payment
+//         stripe.confirmCardPayment(data.clientSecret, {
+//             // payment_method: {
+//             //     card: cardElement,
+//             // },
+//             payment_method: {
+//             card: cardNumber,  // Using the `cardNumber` element
+//         billing_details: {
+//             name: nameOnCard // You can add billing details if needed
+//         }
+//     },
+//         }).then(function(result) {
+//             if (result.error) {
+//                 // Show error to your customer
+//                 document.getElementById('error-message').textContent = result.error.message;
+//             } else {
+//                 if (result.paymentIntent.status === 'succeeded') {
+//                     // Payment succeeded, handle success action
+//                     // window.location.href = '/payment-success'; // Redirect on success
+//                     // console.log(result);
+//                     console.log(result.paymentIntent.id);
+//                     console.log(result.paymentIntent.status);
+
+//                 }
+//             }
+//         });
+//     });
+
+// })
+
+// $(document).on('change','#country',function(){
+//             let id=$(this).val();
+//             // console.log(id);
+//             let opt=$('#state');
+
+//             // console.log(opt)
+//             let options = '';
+//             $.ajax({
+//                 url: `/states/${id}`,
+//                  method: 'GET',
+//                  data: {
+//                         _token: $('meta[name="csrf-token"]').attr('content')
+//                     },
+//                     success: function(response){
+//                         opt.empty();
+                                
+//                                 opt.append('<option value="">Select</option>');
+                      
+//                         $.each(response.state, function(index, state) {
+//                             // console.log(state.name)
+//                          options+=`<option value="${state.id}">${state.name}</option>`
+
+
+//                         })
+//                         opt.append(options);
+
+//                     },
+//                     error: function(error){
+//                         console.log(error);
+//                     }
+
+//         });
+//     });

@@ -1,0 +1,163 @@
+[
+  {
+    "id": 36,
+    "qty": "2",
+    "user_id": 6,
+    "product_id": 23,
+    "color": "18",
+    "size": "33",
+    "created_at": "2024-11-13T11:58:14.000000Z",
+    "updated_at": "2024-11-13T11:58:14.000000Z",
+    "product": {
+      "id": 23,
+      "title": "Admin product",
+      "discription": "yes my product",
+      "quantity": 36,
+      "price": 2,
+      "user_id": null,
+      "sub_id": 19,
+      "brand_id": 2,
+      "is_admin": 1,
+      "is_feature": 1,
+      "created_at": "2024-09-30T06:58:31.000000Z",
+      "updated_at": "2024-11-13T11:59:57.000000Z",
+      "owner_rating": [
+        {
+          "id": 3,
+          "reviewer_id": 6,
+          "product_owner_id": null,
+          "comment": "okay Admin",
+          "rating": 2.8,
+          "created_at": "2024-11-27T12:27:24.000000Z",
+          "updated_at": "2024-11-28T11:11:07.000000Z"
+        },
+        {
+          "id": 4,
+          "reviewer_id": 2,
+          "product_owner_id": null,
+          "comment": "Ali ki trf sy Review",
+          "rating": 4.3,
+          "created_at": null,
+          "updated_at": null
+        }
+      ],
+      "productuser": null,
+      "productusername": null
+    }
+  },
+  {
+    "id": 37,
+    "qty": "1",
+    "user_id": 6,
+    "product_id": 38,
+    "color": "23",
+    "size": "35",
+    "created_at": "2024-11-13T11:58:28.000000Z",
+    "updated_at": "2024-11-13T11:58:28.000000Z",
+    "product": {
+      "id": 38,
+      "title": "New Product",
+      "discription": "yah hai ab new Product jo Pai hai main ny.",
+      "quantity": 2,
+      "price": 5,
+      "user_id": 3,
+      "sub_id": 21,
+      "brand_id": 5,
+      "is_admin": null,
+      "is_feature": null,
+      "created_at": "2024-10-08T09:35:23.000000Z",
+      "updated_at": "2024-11-13T11:59:57.000000Z",
+      "productuser": {
+        "id": 1,
+        "user_id": 3,
+        "photo": "profileImages/1724274784.looksTasty.jpg",
+        "zip": "40100",
+        "city": "Sargodha",
+        "address": "house 888 sargodha",
+        "birthdate": "2024-08-14",
+        "gender": "male",
+        "country_id": 166,
+        "state_id": 2728,
+        "created_at": "2024-08-21T12:57:31.000000Z",
+        "updated_at": "2024-08-22T09:45:25.000000Z"
+      },
+      "productusername": {
+        "id": 3,
+        "name": "Talha khan",
+        "email": "talha@gmail.com",
+        "email_verified_at": null,
+        "number": "03046001147",
+        "created_at": "2024-08-16T13:11:12.000000Z",
+        "updated_at": "2024-08-22T10:22:46.000000Z",
+        "owner_ratings": []
+      }
+    }
+  },
+  {
+    "id": 38,
+    "qty": "1",
+    "user_id": 6,
+    "product_id": 40,
+    "color": "28",
+    "size": "44",
+    "created_at": "2024-11-13T11:58:38.000000Z",
+    "updated_at": "2024-11-13T11:58:38.000000Z",
+    "product": {
+      "id": 40,
+      "title": "Awais Product Laptops",
+      "discription": "yah hai meri 1st Awais Product",
+      "quantity": 8,
+      "price": 8,
+      "user_id": 5,
+      "sub_id": 20,
+      "brand_id": 2,
+      "is_admin": null,
+      "is_feature": null,
+      "created_at": "2024-10-18T11:48:41.000000Z",
+      "updated_at": "2024-11-13T11:59:57.000000Z",
+      "productuser": {
+        "id": 2,
+        "user_id": 5,
+        "photo": "profileImages/1729251680.testi-1.jpg",
+        "zip": null,
+        "city": null,
+        "address": null,
+        "birthdate": null,
+        "gender": null,
+        "country_id": null,
+        "state_id": null,
+        "created_at": "2024-10-18T11:41:20.000000Z",
+        "updated_at": "2024-10-18T11:41:20.000000Z"
+      },
+      "productusername": {
+        "id": 5,
+        "name": "awais Ali",
+        "email": "awais@gmail.com",
+        "email_verified_at": null,
+        "number": "03046001147",
+        "created_at": "2024-10-16T11:24:53.000000Z",
+        "updated_at": "2024-10-16T11:24:53.000000Z",
+        "owner_ratings": [
+          {
+            "id": 2,
+            "reviewer_id": 6,
+            "product_owner_id": 5,
+            "comment": "yah dekho",
+            "rating": 4.7,
+            "created_at": "2024-11-27T11:07:12.000000Z",
+            "updated_at": "2024-11-27T11:08:23.000000Z"
+          },
+          {
+            "id": 5,
+            "reviewer_id": 3,
+            "product_owner_id": 5,
+            "comment": "yah hai awais ko rating Talha ki trf sy.",
+            "rating": 3.5,
+            "created_at": null,
+            "updated_at": null
+          }
+        ]
+      }
+    }
+  }
+]
