@@ -30,6 +30,7 @@ class AccountController extends Controller
         if (is_null($account)) {
             $account = new Account(); // Create an empty instance instead of an array
         }
+        
         // return $account;
         return view('frontEnd.account',compact('firstName','lastName','country','account'));
     }
