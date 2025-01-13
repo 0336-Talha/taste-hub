@@ -714,6 +714,8 @@
 @section('script')
 <script>
 console.log('heelo')
+
+
 function checking(){
     let ch=$('#differ_shipping').is(':checked');
     console.log(ch)
@@ -782,6 +784,8 @@ var form = document.getElementById('payment');
 
 form.addEventListener('submit', function(event) {
     event.preventDefault();
+    document.getElementById("submit-button").disabled = true;
+    
     let nameOnCard=document.getElementById('card-name').value;
     // console.log(nameOnCard);
     let amount=document.getElementById('totalAmount');
@@ -862,11 +866,15 @@ form.addEventListener('submit', function(event) {
             window.location.href = response.redirectUrl;
         } else {
             alert('Payment failed. Please try again.');
+    document.getElementById("submit-button").disabled = false;
+
         }
     },
                 error: function(error) {
                     console.log('Error:', error);
                     alert('An error occurred.');
+    document.getElementById("submit-button").disabled = false;
+
                 }
     });
 

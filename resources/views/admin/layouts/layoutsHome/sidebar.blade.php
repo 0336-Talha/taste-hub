@@ -80,10 +80,10 @@
                             <li class="sidebar-item">
                                 <a href="/admin/orders" class="sidebar-link">Order Items</a>
                             </li>
-                            {{-- <li class="sidebar-item">
+                            <li class="sidebar-item">
                                 <a href="/admin/delivery" class="sidebar-link">Delivered Items</a>
                             </li>
-                       --}}
+                      
                         </ul>
                     </li>
                 </ul>

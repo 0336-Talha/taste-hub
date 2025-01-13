@@ -54,9 +54,7 @@
 							</a></li> 
 							<li><a href="/orders.php">Orders</a></li>
 							<li><a href="/wishlist.php">Wishlist</a></li>
-							<li><a href="/addresses.php">Addresses</a></li>
-							{{-- <li><a href="/compare.php">Compare</a></li> --}}
-							<li><a href="/my-products.php">My Products</a></li>
+							<li><a href="/my-products">My Products</a></li>
 							<li><a href="/user/logout">Sign out</a></li>
 						</ul>
 					</li>

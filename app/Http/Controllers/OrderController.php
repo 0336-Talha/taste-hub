@@ -43,92 +43,7 @@ class OrderController extends Controller
         $scountry=Tbl_country::get()->all();
 
         
-        // main na jo product a rhi hain pechy sy unki base py unka owner ly liya orrr sari product jinka owner voh bnda hai us py rating sy data utha liya jitni bhi rows hain product review ki,
 
-        // $user=Cart::with('product')->with('product.productuser')->with('product.productusername')->get();
-        // $user=Cart::where('user_id',Auth::user()->id)->with(
-        //     'product.productuser',
-        //     'product.productusername',
-     
-        // // 'product.productusername.ownerRatings'
-        // )->get();
-//         $counter=[];
-
-//         // Extract the owner IDs from the cart products
-// // $ownerIds = $user->pluck('product.user_id')->unique();
-// // Step 2: Extract unique owner IDs (filter out admin products with null user_id)
-// $ownerIds = $user->pluck('product.user_id')->filter(function ($value) {
-//     return !is_null($value);  // Filter out null user_id for admin products
-// })->unique();
-
-// // return $ownerIds;
-// // Step 3: Check if there are any admin products (where user_id is null)
-// $adminProductsInCart = $user->where('product.user_id', null)->isNotEmpty();
-
-
-// // Step 3: Get reviews for all products of these owners from cart
-// $productReviews = ProductReview::whereIn('product_id', function ($query) use ($ownerIds) {
-//     $query->select('id')
-//         ->from('products')
-//         ->whereIn('user_id', $ownerIds);  // Only for products owned by the owners in the cart
-// })
-// ->get();
-// $ownerReviews = ProductReview::whereIn('product_id', function ($query) use ($ownerIds) {
-//     $query->select('id')
-//         ->from('products')
-//         ->whereIn('user_id', $ownerIds);  // Including all products, regular and admin
-// }) 
-// ->get();
-// // Step 5: If admin products are in the cart, fetch their reviews
-// if ($adminProductsInCart) {
-//     $adminProductReviews = ProductReview::whereIn('product_id', function ($query) use ($ownerIds) {
-//         $query->select('id')
-//             ->from('products')
-//             ->whereNull('user_id');  // Only fetch admin products if they exist in the cart
-//     })
-//     ->get();
-// } else {
-//     $adminProductReviews = collect();  // Empty collection if no admin products
-// }
-
-// foreach ($user as $cartItem) {
-//     $ownerId = $cartItem->product->user_id;
-    
-//     // Get reviews for this owner
-//     $ownerProductReviews = $ownerReviews->filter(function ($review) use ($ownerId) {
-//         return $review->product->user_id == $ownerId;
-//     });
-
-//     // Add reviews to the cart item
-//     $cartItem->owner_reviews = $ownerProductReviews;
-
-//     // If the product is admin-owned, add admin reviews as well
-//     if (is_null($ownerId)) {
-//         $cartItem->owner_reviews = $cartItem->owner_reviews->merge($adminProductReviews);
-//     }
-// }
-
-// / Step 4: Loop through each cart item and calculate ratings and reviews for each owner
-// foreach ($user as $cartItem) {
-//     $ownerId = $cartItem->product->user_id;
-
-//     // Get reviews for this owner
-//     $ownerProductReviews = $productReviews->filter(function ($review) use ($ownerId) {
-//         return $review->product->user_id == $ownerId;
-//     });
-
-//     // Calculate the total rating and review count for this owner
-//     $totalRating = $ownerProductReviews->sum('rating'); // Sum of all ratings for this owner
-//     $reviewCount = $ownerProductReviews->count(); // Total number of reviews for this owner
-
-//     // Calculate the average rating (if reviews exist)
-//     $averageRating = $reviewCount > 0 ? $totalRating / $reviewCount : 0;
-
-//     // Attach review count and average rating to the cart item
-//     $cartItem->owner_review_count = $reviewCount;
-//     $cartItem->owner_average_rating = $averageRating;
-// }
-// Step 1: Get the cart data with product owner information
 $user = Cart::where('user_id', Auth::user()->id)
     ->with([
         'product.productuser',       // Product Owner
@@ -193,436 +108,19 @@ $productsWithReviews = $products->map(function ($product) use ($reviewsGrouped) 
     // Return the updated collection
     // return $productsWithReviews;
     $prodrev=$productsWithReviews->unique('user_id');
-    
-    // return $prodrev;
-    // if($reving){
 
-    // }
-
-
-
-// Loop through each product in the cart to group reviews by product owner (user_id)
-// foreach ($user as $cartItem) {
-//     // Get the product owner (user_id)
-//     $productOwnerId = $cartItem->product->user_id;
-
-//     // If the product has reviews, process them
-//     if ($cartItem->product->ratings->isNotEmpty()) {
-//         // Loop through the reviews and add them to the grouped data
-//         foreach ($cartItem->product->ratings as $review) {
-//             // If the product owner (user_id) doesn't exist in the grouped array, add it
-//             if (!isset($groupedReviews[$productOwnerId])) {
-//                 $groupedReviews[$productOwnerId] = [
-//                     'owner' => $cartItem->product->productusername,  // Product owner's details
-//                     'reviews' => []  // Initialize an empty array for reviews
-//                 ];
-//             }
-
-//             // Add the review to the owner's reviews array
-//             $groupedReviews[$productOwnerId]['reviews'][] = [
-//                 'review_id' => $review->id,
-//                 'comment' => $review->comment,
-//                 'rating' => $review->rating,
-//                 'reviewer_name' => $review->user->name,  // Reviewer name
-//                 'reviewer_email' => $review->user->email, // Reviewer email
-//             ];
-//         }
-//     }
-
-//     // Handle admin products (where user_id is null)
-//     if ($productOwnerId === null) {
-//         $adminProduct = $cartItem->product;
-//         // If the admin product has reviews, process them
-//         if ($adminProduct->ratings->isNotEmpty()) {
-//             foreach ($adminProduct->ratings as $review) {
-//                 // If admin doesn't exist in the grouped array, initialize it
-//                 if (!isset($groupedReviews['admin'])) {
-//                     $groupedReviews['admin'] = [
-//                         'owner' => 'Admin',  // Static label for Admin
-//                         'reviews' => []  // Initialize an empty array for reviews
-//                     ];
-//                 }
-
-//                 // Add the admin's review to the 'admin' section
-//                 $groupedReviews['admin']['reviews'][] = [
-//                     'review_id' => $review->id,
-//                     'comment' => $review->comment,
-//                     'rating' => $review->rating,
-//                     'reviewer_name' => $review->user->name,  // Reviewer name
-//                     'reviewer_email' => $review->user->email, // Reviewer email
-//                 ];
-//             }
-//         }
-//     }
-// }
-// $groupedReviews = [];
-
-// Loop through each product in the cart to group reviews by product owner (user_id)
-// foreach ($user as $cartItem) {
-//     // Get the product owner (user_id)
-//     $productOwnerId = $cartItem->product->user_id;
-
-//     // Initialize variables for average rating and review count
-//     $totalRating = 0;
-//     $totalReviews = 0;
-
-//     // If the product has reviews, process them
-//     if ($cartItem->product->ratings->isNotEmpty()) {
-//         // Loop through the reviews and add them to the grouped data
-//         foreach ($cartItem->product->ratings as $review) {
-//             // Sum up the ratings for average calculation
-//             $totalRating += $review->rating;
-//             // Count the reviews
-//             $totalReviews++;
-
-//             // If the product owner (user_id) doesn't exist in the grouped array, add it
-//             if (!isset($groupedReviews[$productOwnerId])) {
-//                 $groupedReviews[$productOwnerId] = [
-//                     'owner' => $cartItem->product->productusername,  // Product owner's details
-//                     'reviews' => [],  // Initialize an empty array for reviews
-//                     'total_rating' => 0,  // Initialize total rating
-//                     'total_reviews' => 0   // Initialize total reviews count
-//                 ];
-//             }
-
-//             // Add the review to the owner's reviews array
-//             $groupedReviews[$productOwnerId]['reviews'][] = [
-//                 'review_id' => $review->id,
-//                 'comment' => $review->comment,
-//                 'rating' => $review->rating,
-//                 'reviewer_name' => $review->user->name,  // Reviewer name
-//                 'reviewer_email' => $review->user->email, // Reviewer email
-//             ];
-//         }
-
-//         // After processing the reviews, calculate the average rating for the product owner
-//         $groupedReviews[$productOwnerId]['total_rating'] += $totalRating;
-//         $groupedReviews[$productOwnerId]['total_reviews'] += $totalReviews;
-//     }
-
-//     // Handle admin products (where user_id is null)
-//     if ($productOwnerId === null) {
-//         $adminProduct = $cartItem->product;
-//         // If the admin product has reviews, process them
-//         if ($adminProduct->ratings->isNotEmpty()) {
-//             foreach ($adminProduct->ratings as $review) {
-//                 // Sum up the ratings for average calculation
-//                 $totalRating += $review->rating;
-//                 // Count the reviews
-//                 $totalReviews++;
-
-//                 // If admin doesn't exist in the grouped array, initialize it
-//                 if (!isset($groupedReviews['admin'])) {
-//                     $groupedReviews['admin'] = [
-//                         'owner' => 'Admin',  // Static label for Admin
-//                         'reviews' => [],  // Initialize an empty array for reviews
-//                         'total_rating' => 0,  // Initialize total rating
-//                         'total_reviews' => 0   // Initialize total reviews count
-//                     ];
-//                 }
-
-//                 // Add the admin's review to the 'admin' section
-//                 $groupedReviews['admin']['reviews'][] = [
-//                     'review_id' => $review->id,
-//                     'comment' => $review->comment,
-//                     'rating' => $review->rating,
-//                     'reviewer_name' => $review->user->name,  // Reviewer name
-//                     'reviewer_email' => $review->user->email, // Reviewer email
-//                 ];
-//             }
-
-//             // After processing the reviews, calculate the average rating for the admin
-//             $groupedReviews['admin']['total_rating'] += $totalRating;
-//             $groupedReviews['admin']['total_reviews'] += $totalReviews;
-//         }
-//     }
-// }
 
 // Initialize an array to store the grouped data
 $groupedReviews = [];
 
-// Loop through each product in the cart to group reviews by product owner (user_id)
-// foreach ($user as $cartItem) {
-//     // Get the product owner (user_id)
-//     $productOwnerId = $cartItem->product->user_id;
 
-//     // Initialize variables for average rating and review count
-//     $totalRating = 0;
-//     $totalReviews = 0;
-
-//     // If the product has reviews, process them
-//     if ($cartItem->product->ratings->isNotEmpty()) {
-//         // Loop through the reviews and add them to the grouped data
-//         foreach ($cartItem->product->ratings as $review) {
-//             // Sum up the ratings for average calculation
-//             $totalRating += $review->rating;
-//             // Count the reviews
-//             $totalReviews++;
-
-//             // If the product owner (user_id) doesn't exist in the grouped array, add it
-//             if (!isset($groupedReviews[$productOwnerId])) {
-//                 $groupedReviews[$productOwnerId] = [
-//                     'owner' => $cartItem->product->productusername,  // Product owner's details
-//                     'reviews' => [],  // Initialize an empty array for reviews
-//                     'total_rating' => 0,  // Initialize total rating
-//                     'total_reviews' => 0,   // Initialize total reviews count
-//                 ];
-//             }
-
-//             // Add the review to the owner's reviews array
-//             $groupedReviews[$productOwnerId]['reviews'][] = [
-//                 'review_id' => $review->id,
-//                 'comment' => $review->comment,
-//                 'rating' => $review->rating,
-//                 'reviewer_name' => $review->user->name,  // Reviewer name
-//                 'reviewer_email' => $review->user->email, // Reviewer email
-//             ];
-//         }
-
-//         // After processing the reviews, calculate the total rating and reviews count for the product owner
-//         $groupedReviews[$productOwnerId]['total_rating'] += $totalRating;
-//         $groupedReviews[$productOwnerId]['total_reviews'] += $totalReviews;
-//     }
-
-//     // Handle admin products (where user_id is null)
-//     if ($productOwnerId === null) {
-//         $adminProduct = $cartItem->product;
-//         // If the admin product has reviews, process them
-//         if ($adminProduct->ratings->isNotEmpty()) {
-//             foreach ($adminProduct->ratings as $review) {
-//                 // Sum up the ratings for average calculation
-//                 $totalRating += $review->rating;
-//                 // Count the reviews
-//                 $totalReviews++;
-
-//                 // If admin doesn't exist in the grouped array, initialize it
-//                 if (!isset($groupedReviews['admin'])) {
-//                     $groupedReviews['admin'] = [
-//                         'owner' => 'Admin',  // Static label for Admin
-//                         'reviews' => [],  // Initialize an empty array for reviews
-//                         'total_rating' => 0,  // Initialize total rating
-//                         'total_reviews' => 0,   // Initialize total reviews count
-//                     ];
-//                 }
-
-//                 // Add the admin's review to the 'admin' section
-//                 $groupedReviews['admin']['reviews'][] = [
-//                     'review_id' => $review->id,
-//                     'comment' => $review->comment,
-//                     'rating' => $review->rating,
-//                     'reviewer_name' => $review->user->name,  // Reviewer name
-//                     'reviewer_email' => $review->user->email, // Reviewer email
-//                 ];
-//             }
-
-//             // After processing the reviews, calculate the total rating and reviews count for the admin
-//             $groupedReviews['admin']['total_rating'] += $totalRating;
-//             $groupedReviews['admin']['total_reviews'] += $totalReviews;
-//         }
-//     }
-// }
-
-// // Now calculate the average rating for each product owner
-// foreach ($groupedReviews as $ownerId => &$data) {
-//     // Calculate average rating if there are any reviews
-//     if ($data['total_reviews'] > 0) {
-//         $data['average_rating'] = $data['total_rating'] / $data['total_reviews'];
-//     } else {
-//         $data['average_rating'] = 0;  // No reviews, so set average to 0
-//     }
-
-//     // Adding total reviews count to the data
-//     $data['total_reviews_count'] = $data['total_reviews'];
-// }
-
-// return $groupedReviews;
-
-// Output the grouped reviews for each product owner
-// foreach ($groupedReviews as $ownerId => $data) {
-//     echo "Owner: " . ($ownerId === 'admin' ? 'Admin' : $data['owner']->name) . "<br>";
-//     echo "Reviews:<br>";
-
-//     foreach ($data['reviews'] as $review) {
-//         echo "- Review ID: " . $review['review_id'] . "<br>";
-//         echo "  Comment: " . $review['comment'] . "<br>";
-//         echo "  Rating: " . $review['rating'] . "<br>";
-//         echo "  Reviewer: " . $review['reviewer_name'] . "<br>";
-//         echo "  Reviewer Email: " . $review['reviewer_email'] . "<br><br>";
-//     }
-// }
-    // return $ownerIds;
-    // $reviews = ProductReview::whereHas('product', function ($query) use ($ownerIds) {
-    //     // Match the product's owner (user_id) with ownerIds
-    //     // $query->whereIn('user_id', $ownerIds);
-    //     $query->whereIn('user_id', $ownerIds)
-    //     ->orWhereNull('user_id');
-    // })
-    // ->with([
-    //     'product.productuser',  // Fetch product owner details
-    //     'product.productusername'  // Fetch product details (name, description)
-    // ])
-    // ->get();
-
-    // $groupedReviews = $reviews->groupBy(function($review) {
-    //     // Group by product owner ID (user_id)
-    //     return $review->product->user_id;
-    // });
-    // return $groupedReviews;
- 
-
-
-// Step 2: Extract unique owner IDs from cart items (including admin products)
-// $ownerIds = $user->pluck('product.user_id')->filter(function ($value) {
-//     return !is_null($value);  // Only include non-null user IDs for vendors (filter out admin if null)
-// })->unique();
-
-// // Step 3: Fetch all product reviews for these owners (including admin if user_id is null)
-// $productReviews = ProductReview::whereIn('product_id', function ($query) use ($ownerIds) {
-//     $query->select('id')
-//         ->from('products')
-//         ->whereIn('user_id', $ownerIds);  // Only products owned by the extracted owners
-// })
-// ->get();
-
-// // Step 4: Separate handling for admin products (where user_id is null)
-// $adminProductReviews = collect(); // Default empty collection for admin reviews
-
-// // Check if there are admin products in the cart
-// $adminProductsInCart = $user->where('product.user_id', null)->isNotEmpty();
-
-// if ($adminProductsInCart) {
-//     // Get reviews for admin products (where user_id is null)
-//     $adminProductReviews = ProductReview::whereIn('product_id', function ($query) {
-//         $query->select('id')
-//             ->from('products')
-//             ->whereNull('user_id');  // Only admin products where user_id is null
-//     })
-//     ->get();
-// }
-
-// // Step 5: Loop through each cart item and calculate reviews, rating count, and average for each owner
-// foreach ($user as $cartItem) {
-//     $ownerId = $cartItem->product->user_id;
-
-//     // If the owner is not null, calculate the reviews for that owner
-//     $ownerProductReviews = $productReviews->filter(function ($review) use ($ownerId) {
-//         return $review->product->user_id == $ownerId;
-//     });
-
-//     // Calculate total rating and review count for this owner
-//     $totalRating = $ownerProductReviews->sum('rating'); // Sum of ratings
-//     $reviewCount = $ownerProductReviews->count(); // Count of reviews
-//     $averageRating = $reviewCount > 0 ? $totalRating / $reviewCount : 0;
-
-//     // Attach owner reviews count and average rating to the cart item
-//     $cartItem->owner_review_count = $reviewCount;
-//     $cartItem->owner_average_rating = $averageRating;
-
-//     // If the product owner is admin (user_id is null), merge admin reviews
-//     if (is_null($ownerId)) {
-//         $adminOwnerReviews = $adminProductReviews->filter(function ($review) use ($cartItem) {
-//             return $review->product_id == $cartItem->product->id;
-//         });
-//         $adminTotalRating = $adminOwnerReviews->sum('rating');
-//         $adminReviewCount = $adminOwnerReviews->count();
-//         $adminAverageRating = $adminReviewCount > 0 ? $adminTotalRating / $adminReviewCount : 0;
-
-//         // Attach admin reviews to the cart item
-//         $cartItem->owner_review_count = $adminReviewCount;
-//         $cartItem->owner_average_rating = $adminAverageRating;
-//     }
-// }
-
-
-// return $user;
-// return $ownerReviews;
-
-
-
-        // return $ownerIds;
-
-        // $ownerReviews = ProductReview::whereIn('product_id', function ($query) use ($ownerIds) {
-        //     // Get all products from the owners that are in the cart
-        //     $query->select('id')
-        //         ->from('products')
-        //         ->whereIn('user_id', $ownerIds);
-        // })
-        // ->get();
-
-        // foreach ($user as $cartItem) {
-        //     $ownerId = $cartItem->product->user_id;
-        
-        //     // Filter reviews for this owner
-        //     $ownerProductReviews = $ownerReviews->filter(function ($review) use ($ownerId) {
-        //         return $review->product->user_id == $ownerId;
-        //     });
-        
-        //     // Add reviews to cart item
-        //     $user->owner_reviews = $ownerProductReviews;
-        // }
-
-        // return $user;
-        // distinct()
-        // return $user;
-        // foreach($user as $owner){
-            
-        //     $rate=\App\Models\OwnerReview::where('product_owner_id',$owner->product->user_id)->get();
-        // }
-        // return $rate;
-        // foreach ($user as $item) {
-            
-        //     // Check if productusername is null
-        //     if ($item->product->user_id === Null) {
-               
-                
-        //         // If it's null, get data from OwnerReview where reviewer_id is Auth::id() and owner_id is null
-        //         $ownerReview = \App\Models\OwnerReview::
-        //                                             whereNull('product_owner_id')
-                                          
-        //                                                ->get();  // You can modify 'first()' to 'get()' if you want all
-        
-        //                                             //    if ($ownerReview) {
-        //                                             //     // Assuming productusername is an object or you want to create a new one, you might need to assign like this:
-        //                                             //     // $item->product->productusername = (object)[
-        //                                             //     //     $item->product->productusername->owner_rating = $ownerReview->rating  // You can also assign other attributes here as needed
-        //                                             //     // ];
-        //                                             //     $item->product->productusername = $ownerReview->rating;
-        //                                             // }
-        //         // $item->product->productusername='';
-        //         // Attach the owner review to the product
-        //         $item->product->owner_rating = $ownerReview;
-        
-        //         // $counter=count($ownerReview);
-        //         // // Optionally you can display or process this data
-        //         // if ($ownerReview) {
-        //         //     $item->product->ownerReviewMessage = $ownerReview->review;
-        //         //     $item->product->ownerReviewRating = $ownerReview->rating;
-        //         // } else {
-        //         //     $item->product->ownerReviewMessage = 'No review available';
-        //         //     $item->product->ownerReviewRating = null;
-        //         // }
-        //     }
-        // }
-
-        // return $uniqueOwners;
-        // return $user;
 
 
         //pluck function
         $uniqueOwners = $user->pluck('product.productuser','product.productusername')->unique('id');
         // return $uniqueOwners;
 
-        //map function
-// return $cartItem;
 
-        // Map over the cart items to combine both the productuser and productusername
-// $uniqueOwners = $user->map(function($cartItem) {
-//     return [
-//         'name' => $cartItem->product->productusername->name,
-//         'photo' => $cartItem->product->productuser->photo,
-//     ];
-// })->unique('email'); // Assuming 'email' is unique for each user
-// return $user;
 $rate='';
 $uniqueOwners = $user->map(function($cartItem) {
     
@@ -646,25 +144,7 @@ $uniqueOwners = $user->map(function($cartItem) {
     }
 })->unique('email'); // Assuming 'email' is unique for each user
 
-// $products = Product::with(['ratings.productuser'])  // Load reviews and their owner info
-//                     ->whereIn('user_id', [null, 3, 5]) // Select products with user_id = null (admin) or specific user_ids
-//                     ->get();
-// return $products;
 
-// Looping through the products and accessing reviews with owner data
-
-
-// $rev = [];  // Initialize the $rev array
-
-// foreach ($uniqueOwners as $key => $user) {
-//     // Get reviews for the user based on user_id
-//     $reviews = ProductReview::where('user_id', $user['user_id'])->get();
-
-//     // Convert the collection of reviews to an array and merge with $rev
-//     $rev = array_merge($rev, $reviews->toArray());
-// }
-// return $uniqueOwners;
-//now products.
 $authUser=Auth::user()->id;
 $prod=Cart::where('user_id',Auth::user()->id)->with(['product',
 'product.productOffer'=>function($query)use($authUser){
@@ -674,74 +154,7 @@ $prod=Cart::where('user_id',Auth::user()->id)->with(['product',
 }  
 
 ])->with('product.firstPhoto')->get();
-// return $prod;
-// return $country;
-// $countries = json_decode($country, true);
-// return $country;
-// return $uniqueOwners;
 
-// $groupedReview = collect($groupedReviews);
-// return $uniqueOwners;
-
-// Loop through each unique owner and find their corresponding reviews
-// Loop through each unique owner and find their corresponding reviews
-// Loop through each unique owner and find their corresponding reviews
-
-// $ownersWithReviews = $uniqueOwners->map(function ($owner) use ($prodrev) {
-//     // Special handling for Admin (user_id = null)
-
-    
-//  // This will print every individual owner element in the collection.
-// //  dump($owner['user_id']);
-
-// dump($owner);  // Shows the entire $owner
-// dump($owner['user_id']);  // Shows the user_id
-
-// // Use var_dump to check the type of user_id
-// var_dump($owner['user_id']);  // This will print the type and value of user_id
-
-//     // dd($owner['0']['user_id']);
-//     if (is_null($owner['user_id']) || $owner['user_id'] === '' || $owner['user_id'] === 0 || $owner['user_id'] === '0' || $owner['user_id'] === 'null') {
-//         dump($owner);
-//         // Get the reviews where product's user_id is null (Admin's products)
-//         $adminReviews = collect($prodrev)->filter(function ($prod) {
-//             return is_null($prod['user_id']); // Filter for admin products (user_id is null)
-//         });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-
-//         // If admin reviews exist, calculate the rating sum and total reviews
-//         if ($adminReviews->isNotEmpty()) {
-//             // Calculate the sum of ratings and the total number of reviews for admin
-//             $ratingSum = $adminReviews->sum('rating_sum'); // Sum of all ratings for admin products
-//             $totalReviews = $adminReviews->sum('total_reviews'); // Total number of reviews for admin products
-            
-//             // Calculate average rating for admin
-//             $averageRating = $totalReviews > 0 ? $ratingSum / $totalReviews : 0;
-
-//             // Assign to admin
-//             $owner['average_rating'] = $averageRating;
-//             $owner['total_reviews_count'] = $totalReviews;
-//         } else {
-//             // If no reviews for admin, assign default values
-//             $owner['average_rating'] = 0;
-//             $owner['total_reviews_count'] = 0;
-//         }
-//     } else {
-//         // For non-admin users (user_id != null), find reviews for this specific user
-//         $ownerReviews = collect($prodrev)->firstWhere('user_id', $owner['user_id']);
-
-//         // If reviews exist for this user, assign their average rating and total reviews
-//         if ($ownerReviews) {
-//             $owner['average_rating'] = $ownerReviews['rating_avg'];
-//             $owner['total_reviews_count'] = $ownerReviews['total_reviews'];
-//         } else {
-//             // If no reviews found for the user, set default values
-//             $owner['average_rating'] = 0;
-//             $owner['total_reviews_count'] = 0;
-//         }
-//     }
-
-//     return $owner;
-// });
 
 $ownersWithReviews = $uniqueOwners->map(function ($owner) use ($prodrev) {
     // Debugging: Dump the user_id
@@ -1002,13 +415,7 @@ if ($data != NULL) {
         // return $prod;
         // Ensure that the product relationship is loaded and that the product has a quantity
         if (isset($prod->product->quantity)) {
-            // Show the original quantity of the product
-            // echo 'Original Product Quantity: ' . $prod->product->quantity . ' ';
-
-            // Show the quantity of the product in the cart
-            // echo 'Cart Quantity: ' . $prod->qty . ' ';
-
-            // Calculate the remaining quantity
+          
             $remainingQty = $prod->product->quantity - $prod->qty;
 
             if ($prod->product->is_admin == 1) {
@@ -1036,16 +443,7 @@ if ($data != NULL) {
                 $ownersList[] = $ownerName;
             }
 
-            //user ki notification
-            // if (!in_array($userProd, $userProdNoti)) {
-            //     $userProdNoti[] = $userProd;
-            // }
-            // if (!in_array($ownid, $ownersId)) {
-            //     $ownersId[] = $ownid;
-            // }
-            // Show the remaining quantity after subtraction
-            // echo 'Remaining Quantity: ' . $remainingQty . '<br>';
-            //send purchase Email
+           
             $userPurchaseitems[]=$prod->product;
                 // Update the product's quantity in the database
                 $prod->product->update(['quantity' => $remainingQty]);
@@ -1146,10 +544,7 @@ if(!empty($adminNotifications)){
 
     }
 }
-// //yahn pyyy owners ko notifications
-// foreach($ownersList as $owner)
-// $gotAOrder=new Notification();
-// $gotAOrder->user_id=$prod->product->productusername->id;
+
 
 
 
@@ -1159,8 +554,7 @@ if (!empty($userPurchaseitems)) {
         $msg .= "\n - " . $item->title; // Assuming 'name' is a property of the product
     }
 
-    // Assuming the first product's user can be contacted
-    // $owner = $userPurchaseitems[0]->productusername; // Assuming you have a relationship called 'productuser'
+    
     if (Auth::user()) {
         Mail::to(Auth::user()->email)->send(new \App\Mail\OrderSuccessfull($msg, $userPurchaseitems));
     }
@@ -1181,66 +575,9 @@ return response()->json([
 
 
 
-// if (!empty($outOfStockProducts)) {
-//     $msg = "The following items are out of stock:";
-//     foreach ($outOfStockProducts as $outOfStockProduct) {
-//         $msg .= "\n - " . $outOfStockProduct->title; // Assuming 'name' is a property of the product
-//     }
 
-
-//       // Send the email
-//       if ($outOfStockProducts[0]->is_admin == 1) {
-//         Mail::to('admin@gmail.com')->send(new \App\Mail\ProductOutOfStock($msg, $outOfStockProducts));
-//     } else {
-//         $owner = $outOfStockProducts[0]->productusername; // Assuming you have a relationship called 'productuser'
-//         if ($owner) {
-//             Mail::to($owner->email)->send(new \App\Mail\ProductOutOfStock($msg, $outOfStockProducts));
-//         }
-//     }
-// }
-// $msg="Your Item is Out Of Stock";
-// // Send an email to the product owner
-// if($prod->product->is_admin== 1){
-//     Mail::to('admin@gmail.com')->send(new \App\Mail\ProductOutOfStock($msg,$prod->product));
-// }else{
-// $owner = $prod->product->productusername; // Assuming you have a relationship called 'productuser'
-// if ($owner) {
-//     Mail::to($owner->email)->send(new \App\Mail\ProductOutOfStock($msg,$prod->product));
-//     // return $prod->product;
-// }
-// }
-    // $data=Cart::where("user_id",Auth::user()->id)->delete();
-    // $items=Cart::where('user_id',Auth::user()->id)->get();
-
-    // $data=Cart::where("user_id",Auth::user()->id)->with('product')->get()->all();
-    // if($data != NULL){
-    //     foreach($data as $prod){
-    //         // echo $prod->product->quantity-;
-    //         foreach($items as $cartItem){
-    //             echo $prod->product->quantity.' ';
-    //            echo  $prod->product->quantity - $cartItem->qty;
-    //         }
-    //     }
-    // }
-    // return $data;
  }
-    // Authenticated user ki products lein
-// $products = Product::where('user_id', auth()->id())->pluck('id');
-// // return $products;
-// // Orders lein jinmein ye products hain
-// $orders = Order::whereHas('items', function ($query) use ($products) {
-//     $query->whereIn('product_id', $products);
-// })->with('items.product.firstPhoto')  // Ye line orders ke saath items aur products bhi laegi
-// ->latest()->get();
-// return $orders;
-
-// $orders=Order::with('userProduct')->get()->all();
-// $products = Product::where('user_id', auth()->id())->pluck('id');
-// // $user = Auth()->id();
-// $orders = Order::whereHas('items', function ($query) use ($products) {
-//     $query->whereIn('product_id', $products);
-// })->with('items.product.firstPhoto')  // Ye line orders ke saath items aur products bhi laegi
-// ->latest()->get();
+  
  public function ordersPage(){
 
 $ownerId = Auth()->id(); // Specific owner ID ke hisaab se filter karne ke liye
@@ -1255,107 +592,12 @@ $orders = Order::whereHas('items.product', function ($query) use ($ownerId) {
 //  return $orders;
 
 return view('frontEnd.orders',compact('orders'));
-            // // Authenticated user ki products lein
-            // $products = Product::where('user_id', auth()->id())->get();
-            // $orderIds = $products->pluck('id');
-    
-            // // Orders lein jinme ye products hain
-            // $orders = Order::whereHas('items', function ($query) use ($orderIds) {
-            //     $query->whereIn('product_id', $orderIds);
-            // })->get();
-
-            // // return $orderIds;
-            // return $orders;
-    // $order=Order::where('user_id',Auth::user()->id)->get()->all();
-    // return $order;
-    // $order=Order
-//  $orderItem=Order::with('userProduct')->get()->all();
-    // $orderItem=$orderItem->where('products->user_id',Auth::user()->id)->get();
-    // return $orderItem;
-
-    // $orderItems = Order::with('userProduct')->get()->filter(function($order) {
-    //     // Filter orders where at least one product belongs to the authenticated user
-    //     return $orderItems->products->contains('user_id', Auth::user()->id);
-    // });
-    // return $orderItems;
+       
  }
 
  public function orderinfo($id){
     
-    // $order=OrderItem::where('id',$id)->with('product','product.productSize', 'product.productColors','order')->first();
-
-    // $orderItem = OrderItem::where('order_id',$id)->get()->first();
-    // return $orderItem;
-    // return $orderItem;
-    //  $ownerId = Auth()->id(); // Specific owner ID ke hisaab se filter karne ke liye
-    // $orders = Order::whereHas('items.product', function ($query) use ($ownerId) {
-    // $query->where('user_id', $ownerId);
-// })
-
-// ->with('orderMaker.accountUser','items.product') // Related product and photo data include karne ke liye
-// ->latest()->get();
-
-// $orders= Order::whereHas('items',function($query) use ($id){
-//     $query->where('order_id',$id);
-// })->whereHas('items.product',function($query) {
-//     $query->whereNotNull('user_id');
-// })->with([
-//     'items.product',
-//     'items.product.firstPhoto',
-//     'items.product.getProductCol',
-//     'items.product.getProductSiz',
-
-//         //     'items.product' => function ($query) {
-//         //     $query->with(['getProductCol']);
-//         //     $query->with(['getProductSiz']);
-//         // },
-//         // 'items.product' => function ($query) {
-//         //     $query->with(['getProductSiz']);
-//         // },
-
-//     //     'items.productSize',
-//     //     'items.product' => function ($query) {
-//     //     $query->with(['getProductSiz']);
-//     // },
-//     // 'items.product.productColors',
-//     // 'items.product.productSize',
-//     'items.product.subCategory',
-//     'items.product.subCategory.MainCategory',
-//     'orderMaker',
-//     'items.order.getState',
-//     'items.order.getCountry',
-//     'order'
-// ]
-
-                      
-    
-    // )
-    // ->get()->first();
-// return $orders;  
-    // $order = OrderItem::with(['product', 
-    //                        'product.productColors' => function ($query) use ($orderItem) {
-    //                            $query->where('id', $orderItem->color_id);
-    //                        }, 
-    //                        'product.productSize' => function ($query) use ($orderItem) {
-    //                            $query->where('id', $orderItem->size_id);
-    //                        },
-
-    //                        'product.firstPhoto',
-    //                        'product.brand',
-    //                        'order', 
-    //                        'order.diffShip' => function ($query) use ($orderItem) {
-    //                         $query->where('id', $orderItem->order_id);
-    //                     },
-    //                     'product.subCategory',
-    //                     'product.subCategory.MainCategory',
-
-    //                     'order.getState',
-    //                     'order.getCountry',
-
-    //                        ])
-    // ->where('id', $id)
-    // ->first();
-    // return $orders;
+  
    
     $orders= Order::whereHas('items',function($query) use ($id){
         $query->where('order_id',$id);

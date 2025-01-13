@@ -111,7 +111,7 @@
 							<input type="hidden" id="selectedPrice" name="price" value="">
 						</div>
 						
-						<div class="dropdown">
+						{{-- <div class="dropdown">
 							<button type="button" class="dropdown-toggle chevron" data-bs-toggle="dropdown">Sort By</button>
 							<ul class="dropdown-menu">
 								<li><button type="button">Lorem ipsum dolor</button></li>
@@ -120,7 +120,7 @@
 								<li><button type="button">Amet eligendi corporis</button></li>
 								<li><button type="button">Blanditiis enim ex</button></li>
 							</ul>
-						</div>
+						</div> --}}
 					</form>
 					{{-- </div> display: none; --}}  
 				<div id="loader" style="width: 150px; display: none;" >
